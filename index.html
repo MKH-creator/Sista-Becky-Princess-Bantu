@@ -402,7 +402,7 @@ Au plaisir de te retrouver !</textarea>
 
     /* bande « INVITATION » : plus longue, plus basse, même finesse que le corps du texte */
     var bw2 = 420, bh2 = 32;
-    x.fillStyle = "#e9b102"; x.fillRect(cx - bw2 / 2, y - 22, bw2, bh2);
+    /* BANDE_OFF : rectangle jaune retiré */
     x.fillStyle = "#1f1a17"; x.font = "400 19px " + serif;
     tracked(x, "INVITATION", cx, y - 22 + bh2 / 2 + 6.5, 7);
     y += 80;
