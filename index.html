@@ -95,6 +95,18 @@ button.primary::after{content:"";position:absolute;inset:0;background:linear-gra
 footer{text-align:center;color:var(--muted);font-size:.74rem;letter-spacing:.06em;padding:10px 0 0;line-height:1.9}
 footer a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(240,189,26,.45)}
 @media (prefers-reduced-motion:reduce){#bgv{display:none}*{animation:none!important;transition:none!important}.js .rv{opacity:1;transform:none}}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin:12px 0 10px;text-align:center}
+.stats div{background:rgba(3,22,36,.4);border:1px solid var(--line);border-radius:12px;padding:8px 2px}
+.stats b{display:block;font:600 1.2rem "Lora",Georgia,serif;color:var(--gold)}
+.stats span{font-size:.64rem;color:var(--muted);line-height:1.2;display:block}
+.bar{height:6px;border-radius:9px;background:rgba(255,255,255,.12);overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#f0bd1a,#8be0b0);transition:width .6s}
+#slist h3{font-size:.76rem;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin:18px 0 4px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:10px 0;border-top:1px solid var(--line)}
+.who{flex:1 1 150px;min-width:0}.who b{display:block;font-weight:500;overflow-wrap:anywhere}.who small{color:var(--muted);font-size:.74rem}.who small.late{color:var(--no)}
+.row select{font:inherit;font-size:.82rem;color:var(--text);background:rgba(3,22,36,.55);border:1px solid var(--line);border-radius:10px;padding:8px;min-height:40px}
+.row select option{color:#111}
+button.mini{min-height:40px;padding:8px 14px;width:auto;margin-top:0}
 </style>
 </head>
 <body>
@@ -112,7 +124,7 @@ footer a{color:var(--gold);text-decoration:none;border-bottom:1px solid rgba(240
     <p class="eyebrow">Sista Becky · Princess Bantu</p>
     <h1>Vos invitations nominatives, prêtes à envoyer</h1>
     <p class="lead">Renseignez l’événement, ajoutez vos invités, puis envoyez à chacun une invitation PDF personnalisée.</p>
-    <nav class="chips" aria-label="Étapes"><a href="#s1">1 · Événement</a><a href="#s2">2 · Invités</a><a href="#s3">3 · Aperçu</a><a href="#s4">4 · Envoi</a></nav>
+    <nav class="chips" aria-label="Étapes"><a href="#s1">1 · Événement</a><a href="#s2">2 · Invités</a><a href="#s3">3 · Aperçu</a><a href="#s4">4 · Envoi</a><a href="#s5">5 · Suivi</a></nav>
   </div>
 
   <section class="rv" id="s1">
@@ -174,19 +186,32 @@ Au plaisir de te retrouver ! 🔱✨</textarea>
     <p class="hint">Instagram n’accepte pas les PDF : l’invitation part en deux images (affiche + invitation personnelle) et le message est copié automatiquement. Collez-le dans la conversation juste après. Le bouton « Voir l’itinéraire » n’est pas cliquable dans une image.</p>
     <p class="hint" id="note2" role="status">Depuis un téléphone, le PDF et le message partent toujours ensemble : choisissez WhatsApp, puis l’invité. Le message n’est jamais envoyé sans l’invitation.</p>
   </section>
+  <section class="rv" id="s5">
+    <div class="sh"><span class="n">5</span><h2>Suivi des invités</h2></div>
+    <p class="sub">Tous vos invités sont classés automatiquement par statut. Appuyez sur « Envoyer » : l’invitation part et l’invité passe en « Envoyée ».</p>
+    <div class="stats"><div><b id="c_todo">0</b><span>À envoyer</span></div><div><b id="c_sent">0</b><span>Envoyées</span></div><div><b id="c_ack">0</b><span>Accusés</span></div><div><b id="c_yes">0</b><span>Confirmés</span></div><div><b id="c_no">0</b><span>Absents</span></div></div>
+    <div class="bar"><i id="sbar"></i></div><p class="hint" id="sbarl"></p>
+    <button class="primary" id="sendNext" type="button">Envoyer</button>
+    <p class="hint" id="snote" role="status">Depuis un téléphone, le PDF et le message partent ensemble. Une invitation « Envoyée » depuis plus de 24 h est signalée « à relancer ».</p>
+    <div id="slist"></div>
+    <div class="two"><button id="acc" type="button">Liste d’accueil (PDF)</button><button id="csv" type="button">Exporter (CSV)</button></div>
+    <button class="ghost" id="sreset" type="button" style="margin-top:12px">Tout remettre à « À envoyer »</button>
+  </section>
+
   <footer class="rv">ESPACE INVITATIONS · PRINCESS BANTU<br>Conçu par <a href="https://mkh-creator.github.io/Portfolio/" target="_blank" rel="noopener">MKH Production</a></footer>
 </main>
 
 <div class="ov" id="guide" role="dialog" aria-modal="true" aria-labelledby="gt">
   <div class="card">
     <h2 id="gt">Bienvenue dans votre Espace Invitations</h2>
-    <p class="sub" style="margin:0">Créez et envoyez des invitations PDF personnalisées en cinq étapes.</p>
+    <p class="sub" style="margin:0">Créez et envoyez des invitations PDF personnalisées en six étapes.</p>
     <ol>
       <li><b>Renseignez l’événement</b> : date, lieu, adresse et contact.</li>
       <li><b>Collez votre liste d’invités</b> : un invité par ligne, « Nom ; Numéro ».</li>
       <li><b>Vérifiez l’aperçu</b> avec les boutons Précédent et Suivant.</li>
       <li><b>Téléchargez</b> un PDF par invité, ou toutes les invitations d’un coup.</li>
       <li><b>Envoyez</b> depuis un téléphone avec « Envoyer l’invitation + message » : le PDF et le message partent ensemble (ou en images pour Instagram).</li>
+      <li><b>Suivez</b> les réponses dans la partie Suivi : tout est classé, un bouton « Envoyer » par invité.</li>
     </ol>
     <div class="dd">
       <div class="y"><h3>À faire</h3><ul>
@@ -385,6 +410,7 @@ Au plaisir de te retrouver ! 🔱✨</textarea>
     $("compteur").textContent = "Invité " + (i + 1) + " sur " + g.length;
     var n = guests().length; $("nb").textContent = n + (n > 1 ? " invités" : " invité");
     $("msgprev").textContent = msgText(g[i]);
+    renderSuivi();
     $("t1").setAttribute("aria-pressed", pg === 0); $("t2").setAttribute("aria-pressed", pg === 1);
   }
 
@@ -449,16 +475,101 @@ Au plaisir de te retrouver ! 🔱✨</textarea>
     ]) : Promise.resolve();
     F.then(draw, draw);
   }
-  $("wa").addEventListener("click", function(){
-    var g = curGuest(), n2 = $("note2");
-    if (!window.jspdf){ n2.textContent = "Outils indisponibles, réessayez."; return; }
-    var blob = makePdf(g), name = fname(g, i), file = null;
+  /* suivi des invités */
+  var SVK = "invitations-pb-suivi-v1", SV = {}, ST = { todo: "À envoyer", sent: "Envoyée", ack: "Accusé reçu", yes: "Présence confirmée", no: "Ne vient pas" }, ORDER = ["todo", "sent", "ack", "yes", "no"], armed2 = false;
+  try { SV = JSON.parse(localStorage.getItem(SVK) || "{}") || {}; } catch (e) { SV = {}; }
+  function gk(g){ return g.nom + "|" + (g.tel || "").replace(/\D/g, ""); }
+  function stOf(g){ return SV[gk(g)] || { s: "todo", t: 0, r: 0 }; }
+  function saveSv(){ try { localStorage.setItem(SVK, JSON.stringify(SV)); } catch (e) {} }
+  function when(t){ return new Date(t).toLocaleString("fr-FR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); }
+  function mark(g, st, ch){ var o = stOf(g); SV[gk(g)] = { s: st, t: Date.now(), c: ch || o.c || "", r: o.r || 0 }; saveSv(); renderSuivi(); }
+  function waNum(g){
+    var t = (g.tel || "").trim(), d = t.replace(/\D/g, "");
+    if (d && t.charAt(0) !== "+"){ if (d.indexOf("00") === 0) d = d.slice(2); else if (d.charAt(0) === "0") d = "243" + d.slice(1); }
+    return d;
+  }
+  function relancer(g){
+    var txt = "Salut " + prenom(g.nom) + ", petit rappel : nous n’avons pas encore ta confirmation pour « " + $("ev").value + " », le " + $("date").value + ". Peux-tu nous dire si tu seras des nôtres ? Merci ! 🔱✨";
+    window.open("https://wa.me/" + waNum(g) + "?text=" + encodeURIComponent(txt), "_blank", "noopener");
+    var o = stOf(g); SV[gk(g)] = { s: o.s, t: Date.now(), c: o.c, r: (o.r || 0) + 1 }; saveSv(); renderSuivi();
+  }
+  function sendPdf(g, n, note, counted){
+    if (!window.jspdf){ note.textContent = "Outils indisponibles, réessayez."; return; }
+    var blob = makePdf(g), name = fname(g, n), file = null;
     try { file = new File([blob], name, { type: "application/pdf" }); } catch (e) {}
     if (file && navigator.canShare && navigator.canShare({ files: [file] })){
-      navigator.share({ files: [file], text: msgText(g), title: "Invitation – " + g.nom }).then(function(){ n2.textContent = "Invitation envoyée."; }, function(e){ if (e && e.name !== "AbortError") n2.textContent = "Envoi impossible. Réessayez."; });
+      navigator.share({ files: [file], text: msgText(g), title: "Invitation – " + g.nom }).then(function(){
+        note.textContent = "Invitation envoyée à " + g.nom + ".";
+        if (counted) mark(g, "sent", "Partage");
+      }, function(e){ if (e && e.name !== "AbortError") note.textContent = "Envoi impossible. Réessayez."; });
     } else {
       saveFile(name, blob, "L’envoi groupé n’est pas disponible sur cet appareil : le PDF a été téléchargé, aucun message n’a été envoyé. Utilisez un téléphone.");
     }
+  }
+  function row(g){
+    var o = stOf(g), r = document.createElement("div"), w = document.createElement("div"), b = document.createElement("b"), sm = document.createElement("small");
+    r.className = "row"; w.className = "who"; b.textContent = g.nom;
+    var late = o.s === "sent" && Date.now() - o.t > 864e5;
+    sm.textContent = [g.tel, o.s !== "todo" && o.t ? ST[o.s] + " le " + when(o.t) : "", o.r ? o.r + " relance(s)" : "", late ? "à relancer" : ""].filter(Boolean).join(" · ");
+    if (late) sm.className = "late";
+    w.appendChild(b); w.appendChild(sm); r.appendChild(w);
+    var sel = document.createElement("select"); sel.setAttribute("aria-label", "Statut de " + g.nom);
+    ORDER.forEach(function(k){ var op = document.createElement("option"); op.value = k; op.textContent = ST[k]; if (k === o.s) op.selected = true; sel.appendChild(op); });
+    sel.addEventListener("change", function(){ mark(g, sel.value); });
+    r.appendChild(sel);
+    if (o.s === "todo" || o.s === "sent"){
+      var bt = document.createElement("button"); bt.type = "button"; bt.className = o.s === "todo" ? "primary mini" : "mini"; bt.textContent = o.s === "todo" ? "Envoyer" : "Relancer";
+      bt.addEventListener("click", function(){ if (o.s === "todo") sendPdf(g, g._n, $("snote"), true); else relancer(g); });
+      r.appendChild(bt);
+    }
+    return r;
+  }
+  function renderSuivi(){
+    var L = guests(), box = $("slist"), cnt = { todo: 0, sent: 0, ack: 0, yes: 0, no: 0 }, next = null;
+    box.textContent = "";
+    L.forEach(function(g, n){ g._n = n; var k = stOf(g).s; cnt[k]++; if (!next && k === "todo") next = g; });
+    ORDER.forEach(function(k){ $("c_" + k).textContent = cnt[k]; });
+    var ans = cnt.ack + cnt.yes + cnt.no;
+    $("sbar").style.width = (L.length ? Math.round(100 * ans / L.length) : 0) + "%";
+    $("sbarl").textContent = ans + " réponse" + (ans > 1 ? "s" : "") + " sur " + L.length + " invité" + (L.length > 1 ? "s" : "");
+    var bn = $("sendNext"); bn.disabled = !next; bn._g = next;
+    bn.textContent = next ? "Envoyer à " + next.nom : (L.length ? "Toutes les invitations sont envoyées" : "Ajoutez des invités");
+    ORDER.forEach(function(k){
+      var grp = L.filter(function(g){ return stOf(g).s === k; });
+      if (!grp.length) return;
+      var h = document.createElement("h3"); h.textContent = ST[k] + " · " + grp.length; box.appendChild(h);
+      grp.forEach(function(g){ box.appendChild(row(g)); });
+    });
+  }
+  $("sendNext").addEventListener("click", function(){ var g = this._g; if (g) sendPdf(g, g._n, $("snote"), true); });
+  $("sreset").addEventListener("click", function(){
+    if (!armed2){ armed2 = true; this.textContent = "Confirmer : tout remettre à « À envoyer »"; return; }
+    armed2 = false; SV = {}; saveSv(); renderSuivi(); this.textContent = "Tout remettre à « À envoyer »";
+  });
+  $("csv").addEventListener("click", function(){
+    var q = function(v){ return '"' + String(v).replace(/"/g, '""') + '"'; };
+    var rows = [["Nom", "Téléphone", "Statut", "Mise à jour", "Relances"].map(q).join(";")];
+    guests().forEach(function(g){ var o = stOf(g); rows.push([g.nom, g.tel, ST[o.s], o.t ? when(o.t) : "", o.r || 0].map(q).join(";")); });
+    saveFile("suivi-invitations.csv", new Blob(["\ufeff" + rows.join("\r\n")], { type: "text/csv;charset=utf-8" }), "Suivi exporté.");
+  });
+  $("acc").addEventListener("click", function(){
+    var ok = guests().filter(function(g){ return stOf(g).s === "yes"; });
+    if (!window.jspdf){ $("snote").textContent = "Outils indisponibles, réessayez."; return; }
+    if (!ok.length){ $("snote").textContent = "Aucun invité n’est encore en « Présence confirmée »."; return; }
+    var d = new window.jspdf.jsPDF({ unit: "pt", format: "a4" }), y = 120;
+    d.setFont("helvetica", "bold"); d.setFontSize(16); d.text("Liste d’accueil – " + $("ev").value, 50, 60);
+    d.setFont("helvetica", "normal"); d.setFontSize(10); d.text($("date").value + " · " + $("lieu").value + " · " + ok.length + " invité" + (ok.length > 1 ? "s" : "") + " confirmé" + (ok.length > 1 ? "s" : ""), 50, 80);
+    d.setFont("helvetica", "bold"); d.text("Entré", 50, 105); d.text("Invité", 100, 105); d.setFont("helvetica", "normal"); d.setFontSize(12);
+    ok.forEach(function(g){
+      if (y > 800){ d.addPage(); y = 60; }
+      d.rect(52, y - 9, 11, 11); d.text(g.nom, 100, y); d.setDrawColor(220); d.line(50, y + 8, 545, y + 8); d.setDrawColor(0); y += 24;
+    });
+    saveFile("liste-accueil.pdf", d.output("blob"), "Liste d’accueil téléchargée.");
+  });
+  $("wa").addEventListener("click", function(){
+    var L = guests(); if (!L.length) return;
+    var g = L[Math.min(i, L.length - 1)]; g._n = Math.min(i, L.length - 1);
+    sendPdf(g, g._n, $("note2"), true);
   });
   $("ig").addEventListener("click", function(){
     var g = curGuest(), n2 = $("note2");
@@ -469,7 +580,7 @@ Au plaisir de te retrouver ! 🔱✨</textarea>
       try { inv = new File([blob], base + ".jpg", { type: "image/jpeg" }); } catch (e) {}
       function done(list){
         if (list.length && navigator.canShare && navigator.canShare({ files: list })){
-          navigator.share({ files: list, title: "Invitation – " + g.nom }).then(function(){ n2.textContent = "Images partagées. Le message est copié : collez-le dans la conversation."; }, function(e){ if (e && e.name !== "AbortError") n2.textContent = "Partage impossible. Réessayez."; });
+          navigator.share({ files: list, title: "Invitation – " + g.nom }).then(function(){ n2.textContent = "Images partagées. Le message est copié : collez-le dans la conversation."; if (guests().length) mark(g, "sent", "Instagram"); }, function(e){ if (e && e.name !== "AbortError") n2.textContent = "Partage impossible. Réessayez."; });
         } else {
           saveFile(base + ".jpg", blob, "Image téléchargée : envoyez-la depuis Instagram, puis collez le message (déjà copié).");
         }
